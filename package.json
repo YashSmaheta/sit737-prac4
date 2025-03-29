@@ -1,0 +1,15 @@
+{
+  "name": "sit737-prac4",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "open": "^10.1.0",
+    "winston": "^3.17.0"
+  }
+}

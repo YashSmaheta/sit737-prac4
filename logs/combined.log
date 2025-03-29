@@ -1,0 +1,13 @@
+{"level":"info","message":"Calculator microservice running on http://localhost:3000","service":"calculator-microservice"}
+{"level":"error","message":"Invalid input: num1 and num2 must be valid numbers.","service":"calculator-microservice"}
+{"level":"info","message":"Calculator microservice running at http://localhost:3000","service":"calculator-microservice"}
+{"level":"info","message":"Addition operation: 4 + 7 = 11","service":"calculator-microservice"}
+{"level":"info","message":"Subtraction operation: 4 - 77 = -73","service":"calculator-microservice"}
+{"level":"info","message":"Multiplication operation: 4 * 12 = 48","service":"calculator-microservice"}
+{"level":"info","message":"Division operation: 4 / 2 = 2","service":"calculator-microservice"}
+{"level":"info","message":"Calculator microservice running at http://localhost:3000","service":"calculator-microservice"}
+{"level":"info","message":"Addition operation: 6 + 12 = 18","service":"calculator-microservice"}
+{"level":"info","message":"Calculator microservice running at http://localhost:3000","service":"calculator-microservice"}
+{"level":"info","message":"Subtraction operation: 20 - 15 = 5","service":"calculator-microservice"}
+{"level":"info","message":"Multiplication operation: 20 * 3 = 60","service":"calculator-microservice"}
+{"level":"info","message":"Division operation: 20 / 4 = 5","service":"calculator-microservice"}
