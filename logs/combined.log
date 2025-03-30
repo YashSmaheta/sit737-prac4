@@ -11,3 +11,19 @@
 {"level":"info","message":"Subtraction operation: 20 - 15 = 5","service":"calculator-microservice"}
 {"level":"info","message":"Multiplication operation: 20 * 3 = 60","service":"calculator-microservice"}
 {"level":"info","message":"Division operation: 20 / 4 = 5","service":"calculator-microservice"}
+{"level":"info","message":"Calculator microservice running at http://localhost:3000","service":"calculator-microservice"}
+{"level":"info","message":"Square Root: √200 = 14.142135623730951","service":"calculator-microservice"}
+{"level":"info","message":"Exponentiation: 2^4 = 16","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 200 % 4 = 0","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 201 % 4 = 1","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 205 % 4 = 1","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 205 % 4 = 1","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 205 % 4 = 1","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 203 % 4 = 3","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 14334 % 4 = 2","service":"calculator-microservice"}
+{"level":"info","message":"Calculator microservice running at http://localhost:3000","service":"calculator-microservice"}
+{"level":"info","message":"Exponentiation: 5^6 = 15625","service":"calculator-microservice"}
+{"level":"info","message":"Square Root: √525 = 22.9128784747792","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 525 % 3 = 0","service":"calculator-microservice"}
+{"level":"info","message":"Modulo: 525 % 6 = 3","service":"calculator-microservice"}
+{"level":"error","message":"Division by zero error","service":"calculator-microservice"}

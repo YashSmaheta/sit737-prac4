@@ -19,9 +19,9 @@ const logger = winston.createLogger({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-const validateNumbers = (num1, num2) => {
-    if (isNaN(num1) || isNaN(num2)) {
-        return { error: 'Invalid input: num1 and num2 must be valid numbers.' };
+const validateNumbers = (num1, num2 = null) => {
+    if (isNaN(num1) || (num2 !== null && isNaN(num2))) {
+        return { error: 'Invalid input: Numbers must be valid.' };
     }
     return null;
 };
@@ -82,6 +82,46 @@ app.get('/divide', (req, res) => {
     res.json({ result });
 });
 
+app.get('/power', (req, res) => {
+    const num1 = parseFloat(req.query.num1);
+    const num2 = parseFloat(req.query.num2);
+    const validationError = validateNumbers(num1, num2);
+    if (validationError) {
+        logger.error(validationError.error);
+        return res.status(400).json(validationError);
+    }
+    const result = Math.pow(num1, num2);
+    logger.info(`Exponentiation: ${num1}^${num2} = ${result}`);
+    res.json({ result });
+});
+
+app.get('/sqrt', (req, res) => {
+    const num1 = parseFloat(req.query.num1);
+    if (isNaN(num1) || num1 < 0) {
+        logger.error('Invalid input for square root operation.');
+        return res.status(400).json({ error: 'Invalid input: Cannot compute square root of negative numbers.' });
+    }
+    const result = Math.sqrt(num1);
+    logger.info(`Square Root: √${num1} = ${result}`);
+    res.json({ result });
+});
+
+app.get('/modulo', (req, res) => {
+    const num1 = parseFloat(req.query.num1);
+    const num2 = parseFloat(req.query.num2);
+    const validationError = validateNumbers(num1, num2);
+    if (validationError) {
+        logger.error(validationError.error);
+        return res.status(400).json(validationError);
+    }
+    if (num2 === 0) {
+        logger.error('Modulo by zero error');
+        return res.status(400).json({ error: 'Cannot calculate modulo with divisor zero.' });
+    }
+    const result = num1 % num2;
+    logger.info(`Modulo: ${num1} % ${num2} = ${result}`);
+    res.json({ result });
+});
 app.listen(port, () => {
     logger.info(`Calculator microservice running at http://localhost:${port}`);
     console.log(`Calculator microservice running at http://localhost:${port}`);
