@@ -35,6 +35,17 @@ App is accesible from
 localhost:3000 
 ```
 
+Docker compose 
+```sh
+docker-compose up --build
+```
+
+build and push docker image to registrty
+```sh
+docker build -t your-username/calculator-microservice .
+docker push your-username/calculator-microservice
+```
+
 🔴 Error Handling:
 
 -> Invalid inputs return a 400 Bad Request response.
