@@ -46,6 +46,20 @@ docker build -t your-username/calculator-microservice .
 docker push your-username/calculator-microservice
 ```
 
+Create a K8s deployment and Service
+```sh
+kubectl apply -f deployment.yaml
+kubectl get pods
+
+kubectl apply -f service.yaml
+kubectl get service
+```
+Once it deployed completely you can see the app running on 
+```sh
+http://localhost:port
+```
+
+
 🔴 Error Handling:
 
 -> Invalid inputs return a 400 Bad Request response.
