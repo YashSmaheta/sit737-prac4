@@ -17,5 +17,6 @@
     "type": "git",
     "url": "git@github-deakin:YashSmaheta/sit737-prac4.git"
   },
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {}
 }
