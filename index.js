@@ -1,88 +1,93 @@
 const express = require('express');
-const winston = require('winston');
+const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
+
+// MongoDB connection configuration from environment variables
+const username = process.env.MONGO_INITDB_ROOT_USERNAME;
+const password = process.env.MONGO_INITDB_ROOT_PASSWORD;
+const host = process.env.MONGO_HOST || "localhost";
+const db = process.env.MONGO_DB || "crudDB";
+const mongoUrl = `mongodb://${username}:${password}@${host}:27017/${db}?authSource=admin`
+
+const collectionName = 'users';
 const app = express();
 const port = 3000;
 
-// logging using winston
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    defaultMeta: { service: 'calculator-microservice' },
-    transports: [
-        new winston.transports.Console({ format: winston.format.simple() }),
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' }),
-    ],
-});
-
+// Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const validateNumbers = (num1, num2) => {
-    if (isNaN(num1) || isNaN(num2)) {
-        return { error: 'Invalid input: num1 and num2 must be valid numbers.' };
-    }
-    return null;
+let client;
+
+const connectToDb = async () => {
+  try {
+    client = await MongoClient.connect(mongoUrl); // No need for deprecated options
+    console.log('✅ Connected to MongoDB');
+  } catch (error) {
+    console.error('❌ Error connecting to MongoDB:', error);
+  }
 };
 
-app.get('/add', (req, res) => {
-    const num1 = parseFloat(req.query.num1);
-    const num2 = parseFloat(req.query.num2);
-    const validationError = validateNumbers(num1, num2);
-    if (validationError) {
-        logger.error(validationError.error);
-        return res.status(400).json(validationError);
-    }
-    const result = num1 + num2;
-    logger.info(`Addition operation: ${num1} + ${num2} = ${result}`);
-    res.json({ result });
+// ➕ Create
+app.post('/api/submit', async (req, res) => {
+  console.log('Request Body:', req.body); // Log the incoming data
+  const { name, age } = req.body;
+
+  if (!name || !age) {
+    console.error('Missing required fields: name or age');
+    return res.status(400).send({ message: 'Name and age are required.' });
+  }
+
+  try {
+    const result = await client.db(db).collection(collectionName).insertOne({ name, age });
+    res.status(200).send({ message: 'Data added successfully!', result });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).send({ message: 'Error inserting data', error });
+  }
 });
 
-app.get('/subtract', (req, res) => {
-    const num1 = parseFloat(req.query.num1);
-    const num2 = parseFloat(req.query.num2);
-    const validationError = validateNumbers(num1, num2);
-    if (validationError) {
-        logger.error(validationError.error);
-        return res.status(400).json(validationError);
-    }
-    const result = num1 - num2;
-    logger.info(`Subtraction operation: ${num1} - ${num2} = ${result}`);
-    res.json({ result });
+// 📖 Read
+app.get('/api/data', async (req, res) => {
+  try {
+    const data = await client.db(db).collection(collectionName).find().toArray();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).send({ message: 'Error fetching data', error });
+  }
 });
 
-app.get('/multiply', (req, res) => {
-    const num1 = parseFloat(req.query.num1);
-    const num2 = parseFloat(req.query.num2);
-    const validationError = validateNumbers(num1, num2);
-    if (validationError) {
-        logger.error(validationError.error);
-        return res.status(400).json(validationError);
-    }
-    const result = num1 * num2;
-    logger.info(`Multiplication operation: ${num1} * ${num2} = ${result}`);
-    res.json({ result });
+// ✏️ Update
+app.put('/api/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, age } = req.body;
+
+  try {
+    const result = await client.db(db).collection(collectionName).updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { name, age } }
+    );
+    res.status(200).send({ message: 'Data updated', result });
+  } catch (error) {
+    res.status(500).send({ message: 'Error updating data', error });
+  }
 });
 
-app.get('/divide', (req, res) => {
-    const num1 = parseFloat(req.query.num1);
-    const num2 = parseFloat(req.query.num2);
-    const validationError = validateNumbers(num1, num2);
-    if (validationError) {
-        logger.error(validationError.error);
-        return res.status(400).json(validationError);
-    }
-    if (num2 === 0) {
-        logger.error('Division by zero error');
-        return res.status(400).json({ error: 'Cannot divide by zero.' });
-    }
-    const result = num1 / num2;
-    logger.info(`Division operation: ${num1} / ${num2} = ${result}`);
-    res.json({ result });
+// ❌ Delete
+app.delete('/api/delete/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await client.db(db).collection(collectionName).deleteOne({ _id: new ObjectId(id) });
+    res.status(200).send({ message: 'Data deleted', result });
+  } catch (error) {
+    res.status(500).send({ message: 'Error deleting data', error });
+  }
 });
 
-app.listen(port, () => {
-    logger.info(`Calculator microservice running at http://localhost:${port}`);
-    console.log(`Calculator microservice running at http://localhost:${port}`);
+// Start the Express server
+app.listen(port, async () => {
+  console.log(`🚀 Server is running on http://localhost:${port}`);
+  await connectToDb();
 });

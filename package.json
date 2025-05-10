@@ -10,6 +10,8 @@
   "description": "This project is a simple microservice built using **Node.js** and **Express.js** that provides basic arithmetic operations (addition, subtraction, multiplication, and division) via a REST API. The service also includes error handling and logging using **Winston**.",
   "dependencies": {
     "express": "^5.1.0",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1",
     "open": "^10.1.0",
     "winston": "^3.17.0"
   },
@@ -17,6 +19,5 @@
     "type": "git",
     "url": "git@github-deakin:YashSmaheta/sit737-prac4.git"
   },
-  "keywords": [],
-  "devDependencies": {}
+  "keywords": []
 }
